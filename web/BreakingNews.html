@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Breaking News</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather&family=Montserrat&family=Open+Sans&family=Roboto+Condensed&display=swap');
+
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: "Roboto Condensed", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                background-color: #f0f0f0;
+            }
+            .header {
+                background-color: blueviolet;
+                border-bottom: 2px solid black;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+            .logo {
+                padding: 20px 15px;
+                font-size: 40px;
+                text-decoration: none;
+                font-family: "Bebas Neue", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                text-shadow: 2px 2px 2px black;
+                color: white;
+            }
+            #logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #home,#mode{
+                color: white;
+                font-size: 24px;
+                margin: 15px;
+            }
+            body::-webkit-scrollbar {
+                display: none;
+            }
+            @media (max-width: 425px){
+                .logo{
+                    font-size: 30px;
+                    padding: 15px 10px;
+                }
+                #home,#mode{
+                    font-size: 16px;
+                }
+                .card{
+                    width: 360px;
+                }
+            }
+            @media (max-width: 768px) {
+                .card {
+                    width: 300px;
+                }
+            }
+            @media (min-width:768px) {
+                .card {
+                    width: 360px;
+                }
+            }
+            main {
+                padding: 20px;
+            }
+
+            .cards-container {
+                display: flex;
+                justify-content: space-evenly;
+                max-width: 1180px;
+                overflow: hidden;
+                flex-wrap: wrap;
+                column-gap: 15px;
+                row-gap: 30px;
+                align-items: start;
+            }
+
+            .card {
+                border: 2px solid blueviolet;
+                min-height: 400px;
+                box-shadow: 0 0 8px black;
+                border-radius: 4px;
+                cursor: pointer;
+                background-color: #fff;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .card:hover {
+                box-shadow: 1px 1px 8px #d4ecff;
+                background-color: #f9fdff;
+                transform: translateY(-2px);
+            }
+
+            .card-header {
+                margin-bottom: -4px;
+            }
+
+            .card-header img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-bottom: 2px solid blueviolet;
+            }
+
+            .news-source {
+                font-family: "Montserrat", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                color: white;
+                padding: 4px 12px;
+                background-color: blueviolet;
+                margin: 0;
+            }
+
+            #news-title {
+                padding: 12px;
+                color: black;
+                font-family: "Merriweather", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+
+            #cards-main {
+                padding-top: 50px;
+                display: flex;
+                justify-content: space-evenly;
+            }
+
+            .news-desc {
+                color: black;
+                padding: 12px;
+                padding-top: 0px;
+                text-overflow: ellipsis;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+            .flex{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: blueviolet;
+                padding: 5px 10px;
+                margin: 0;
+            }
+
+            .saved-news{
+                color: white;
+                font-size: 20px;
+            }
+
+            .notification {
+                display: none;
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                color: white;
+                background-color: blueviolet;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                font-family: "Lato", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+              integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+        <header class="header">
+            <div>
+                <a href="index.html"><i class="fa-solid fa-house" id="home"></i></a>
+            </div>
+            <div id="logo">
+                <div class="logo">THE NOBLE NEWS</div>
+            </div>
+            <div>
+                <i class="fa-solid fa-sun" id="mode"></i>
+            </div>
+        </header>
+        <main id="cards-main">
+            <div class="cards-container" id="cards-container">
+            </div>
+        </main>
+        <template id="template-news-card">
+            <div class="card">
+                <div class="card-header">
+                    <img src="https://via.placeholder.com/400x200" alt="news-image" onerror="this.src='alt-image.webp';"
+                         id="news-img">
+                </div>
+                <div> 
+                    <div class="flex">
+                        <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6><i onclick="saved()" class="saved-news fa-regular fa-floppy-disk"></i>
+                    </div>
+                    <h3 id="news-title">This is the Title</h3>
+                    <p class="news-desc" id="news-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+                </div>
+            </div>
+        </template>
+        <div id="notification" class="notification"></div>
+        <script src="breakingNews.js"></script>
+    </body>
+</html>

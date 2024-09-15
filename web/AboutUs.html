@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About Us - Nobel News</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather&family=Montserrat&family=Open+Sans&family=Roboto+Condensed&display=swap');
+
+            body {
+                font-family: "Roboto Condensed", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                background-color: #f0f0f0;
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            h1 {
+                color: #333;
+                font-family: "Merriweather", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+            p {
+                margin-bottom: 20px;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+            ul {
+                margin-bottom: 20px;
+                padding-left: 20px;
+            }
+            ul li {
+                margin-bottom: 10px;
+                font-family: "Montserrat", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+            footer {
+                text-align: center;
+                padding: 20px;
+                background-color: blueviolet;
+                color: white;
+            }
+            .header {
+                background-color: blueviolet;
+                border-bottom: 2px solid black;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            .logo {
+                padding: 20px 15px;
+                font-family: "Bebas Neue", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                font-size: 40px;
+                text-decoration: none;
+                text-shadow: 2px 2px 2px black;
+                color: white;
+            }
+            #logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #home,#mode{
+                color: white;
+                font-size: 24px;
+                margin: 15px;
+            }
+            body::-webkit-scrollbar {
+                display: none;
+            }
+            @media (max-width: 425px){
+                .logo{
+                    font-size: 30px;
+                    padding: 15px 10px;
+                }
+                #home,#mode{
+                    font-size: 16px;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+              integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+        <header class="header">
+            <div>
+                <a href="index.html"><i class="fa-solid fa-house" id="home"></i></a>
+            </div>
+            <div id="logo">
+                <div class="logo">THE NOBLE NEWS</div>
+            </div>
+            <div>
+                <i class="fa-solid fa-sun" id="mode"></i>
+            </div>
+        </header>
+        <div class="container">
+            <h1>About Us</h1>
+            <p>Welcome to Nobel News, your one-stop destination for staying updated with the latest news from around the world. Our website is designed to deliver reliable news in a user-friendly environment, making it easy for you to stay informed about current events in various fields. Whether it’s politics, sports, entertainment, or technology, we aim to provide you with news that matters most to you.</p>
+
+            <p>Our mission is to offer a seamless news browsing experience, giving users access to articles from different perspectives, all while ensuring ease of navigation and personalized features.</p>
+
+            <h2>Key Features:</h2>
+            <ul>
+                <li><strong>Personalized News Selection:</strong> Our website allows users to choose specific types of news based on their preferences, ensuring that the news feed is tailored to each individual’s interests.</li>
+                <li><strong>News by Category:</strong> Get news from various fields such as politics, sports, technology, entertainment, and more, ensuring you are up to date with the topics you care about the most.</li>
+                <li><strong>Breaking News Alerts:</strong> Stay informed with real-time breaking news pop-ups that ensure you never miss an important event.</li>
+                <li><strong>Multiple News Sources:</strong> We use NewsAPI to bring you news from a wide range of reliable sources, providing you with a comprehensive view of the latest stories.</li>
+                <li><strong>Balanced Ads:</strong> To maintain a smooth user experience, we keep ads to a minimum, ensuring that they don’t interfere with your news consumption.</li>
+                <li><strong>Night Mode for Logged-In Users:</strong> For users who prefer to read at night, we provide an automatic night mode that offers a comfortable reading experience.</li>
+                <li><strong>Country-Specific News:</strong> You can easily select news from specific countries, allowing you to focus on global or regional updates based on your preferences.</li>
+                <li><strong>Multilingual News from India:</strong> News from India is available in three languages: English, Hindi, and Tamil, so you can stay informed in the language of your choice.</li>
+                <li><strong>Save Your Favorite News:</strong> Found an article you want to revisit? You can save any news article for later reading with just a click.</li>
+                <li><strong>Browse News by Date:</strong> Our website allows you to browse news from any selected date up to the current date, making it easier to catch up on past events.</li>
+                <li><strong>Quick Overview with Full News Access/Click for Full News:</strong> We display a brief description of each news article, giving you a summary at a glance. If you’re interested in reading more, simply click to access the full article.</li>
+            </ul>
+
+            <p>At Nobel News, our goal is to provide you with a tailored, engaging, and informative news-reading experience. What we want is to keep you informed, whether you're on the go or relaxing at home. Stay connected to the world of news, curated for your convenience. So stay connected to the stories that matter to you!</p>
+        </div>
+
+        <footer>
+            &copy; 2024 Nobel News. All rights reserved.
+        </footer>
+
+        <script>
+            const Mode = document.getElementById("mode");
+            Mode.addEventListener("click", function () {
+                if (Mode.classList.contains("fa-sun")) {
+                    Mode.classList.remove("fa-sun");
+                    Mode.classList.add("fa-moon");
+                    document.querySelector(".container").style.backgroundColor="#454545";
+                    document.querySelector("h1").style.color = "white";
+                    document.querySelector("h2").style.color = "white";
+                    let strong = document.querySelectorAll("strong");
+                    let p = document.querySelectorAll("p");
+                    let li = document.querySelectorAll("li");
+                    changeColor([...strong, ...p, ...li], 'white');
+                } else {
+                    Mode.classList.remove("fa-moon");
+                    Mode.classList.add("fa-sun");
+                    document.querySelector(".container").style.backgroundColor="#f0f0f0";
+                    document.querySelector("h1").style.color = "black";
+                    document.querySelector("h2").style.color = "black";
+                    let strong = document.querySelectorAll("strong");
+                    let p = document.querySelectorAll("p");
+                    let li = document.querySelectorAll("li");
+                    changeColor([...strong, ...p, ...li], 'black');
+                }
+            });
+
+            function changeColor(elements, color) {
+                elements.forEach(element => {
+                    element.style.color = color;
+                });
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Noble News</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+              integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <header class="header">
+            <div id="logo">
+                <div class="logo">THE NOBLE NEWS</div>
+            </div>
+            <nav class="navbar">
+                <ul class="nav-list">
+                    <li id="Home" class="nav-item" onclick="reload()" data-translate="home" data-category="home">Home</li>
+                    <li class="nav-item"><a id="About-us" href="AboutUs.html">About us</a></li>
+                    <li class="nav-item" id="top-headlines" data-translate="Breaking News" onclick="onNavItemClick('top-headlines')" data-category="top-headlines">Breaking News</li>
+                    <li id="World" class="nav-item" onclick="onNavItemClick('World')" data-translate="world" data-category="world">World</li>
+                    <li id="Politics" class="nav-item" onclick="onNavItemClick('Politics')" data-translate="politics" data-category="politics">Politics</li>
+                    <li id="Business" class="nav-item" onclick="onNavItemClick('Business')" data-translate="business" data-category="business">Business</li>
+                    <li id="Education" class="nav-item" onclick="onNavItemClick('Education')" data-translate="education" data-category="education">Education</li>
+                    <li id="Technology" class="nav-item" onclick="onNavItemClick('Technology')" data-translate="technology" data-category="technology">Technology</li>
+                    <li id="Science" class="nav-item" onclick="onNavItemClick('Science')" data-translate="science" data-category="science">Science</li>
+                    <li id="Health" class="nav-item" onclick="onNavItemClick('Health')" data-translate="health" data-category="health">Health</li>
+                    <li id="Sports" class="nav-item" onclick="onNavItemClick('Sports')" data-translate="sports" data-category="sports">Sports</li>
+                    <li id="Entertainment" class="nav-item" onclick="onNavItemClick('Entertainment')" data-translate="entertainment" data-category="entertainment">Entertainment</li>
+                    <li id="Lifestyle" class="nav-item" onclick="onNavItemClick('Lifestyle')" data-translate="lifestyle" data-category="lifestyle">Lifestyle</li>
+                    <li id="Environment" class="nav-item" onclick="onNavItemClick('Environment')" data-translate="environment" data-category="environment">Environment</li>
+                    <li id="Crime" class="nav-item" onclick="onNavItemClick('Crime')" data-translate="crime" data-category="crime">Crime</li>
+                </ul>
+            </nav>
+            <div class="header-content">
+                <div></div>
+                <div id="search">
+                    <input type="text" placeholder="Search" id="search-bar">
+                    <i class="fa-solid fa-search search-icon"></i> <!-- Add icon element inside the div -->
+                </div>
+                <div id="display-login" style="display: none;">
+                    <span id="toggle-login">Login</span>
+                </div>
+                <div id="display-profile" style="display: none;">
+                    <i id="profile" class="fa-solid fa-circle-user"></i>
+                </div>
+            </div>
+        </header>
+        <main id="cards-main">
+            <div class="cards-container" id="cards-container">
+            </div>
+        </main>
+        <template id="template-news-card">
+            <div class="card">
+                <div class="card-header">
+                    <img src="https://via.placeholder.com/400x200" alt="news-image" onerror="this.src='alt-image.webp';"
+                         id="news-img">
+                </div>
+                <div> 
+                    <div class="flex">
+                        <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6><i onclick="saved()" class="saved-news fa-regular fa-floppy-disk"></i>
+                    </div>
+                    <h3 id="news-title">This is the Title</h3>
+                    <p class="news-desc" id="news-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+                </div>
+            </div>
+        </template>
+        <div id="login-page">
+            <div id="login">
+                <form action="UserServlet" method="post" id="login-form">
+                    <span class="form-span">Login</span>
+                    <label for="login-email" class="login-page-label">Email</label>
+                    <input type="text" id="login-email" class="login-page-input" placeholder="Enter Your Email"
+                           name="login-email" required>
+                    <label for="login-password" class="login-page-label">Password</label>
+                    <input type="password" id="login-password" class="login-page-input" placeholder="Enter Your Password"
+                           name="login-password" required>
+                    <input type="hidden" name="action" value="login">
+                    <button type="submit" id="logined" class="login-page-button">Login</button>
+                </form>
+                <div id="hide-login" style="display: none;">
+                    <h2>Welcome User!</h2>
+                    <span class="hide-span">If you already have an account</span>
+                    <button class="login-page-button change" id="change-to-login">Login</button>
+                </div>
+            </div>
+            <div id="register">
+                <form action="UserServlet" method="post" id="register-form">
+                    <span class="form-span">Create Account</span>
+                    <label for="register-username" class="login-page-label">Username</label>
+                    <input type="text" id="register-username" class="login-page-input" placeholder="Enter Your Username"
+                           name="register-username" required>
+                    <label for="register-email" class="login-page-label">Email</label>
+                    <input type="text" id="register-email" class="login-page-input" placeholder="Enter Your Email"
+                           name="register-email" required>
+                    <label for="register-password" class="login-page-label">Password</label>
+                    <input type="password" id="register-password" class="login-page-input" placeholder="Enter Your Password"
+                           name="register-password" required>
+                    <input type="hidden" name="action" value="register">
+                    <button type="submit" id="registered" class="login-page-button">Register</button>
+                </form>
+                <div id="hide-register">
+                    <h2>Hello User!</h2>
+                    <span class="hide-span">If you don't have an account</span>
+                    <button class="login-page-button change" id="change-to-register">Register</button>
+                </div>
+            </div>
+        </div>
+        <div id="features">
+            <div id="saved-div" class="border">
+                <span id="saved-news" class="options">Saved News</span>
+                <i class="fa-regular fa-floppy-disk"></i>
+            </div>
+            <div id="mode-div" class="border">
+                <span id="night-mode" class="options">Night Mode</span>
+                <i class="fa-solid fa-toggle-off" id="mode"></i>
+            </div>
+            <div id="options">
+                <div class="border">
+                    <label for="language" class="options">Language</label>
+                    <select id="language" class="language">
+                        <option value="en" selected>English</option>
+                        <option value="hi" id="hindi">Hindi</option>
+                        <option value="mr" id="marathi">Marathi</option>
+                    </select>
+                </div>
+                <div class="border">
+                    <label for="country" class="options">Country</label>
+                    <select id="country" class="language">
+                        <option value="in" class="language" selected>India</option>
+                        <option value="us" class="language">United States</option>
+                        <option value="gb" class="language">United Kingdom</option>
+                        <option value="au" class="language">Australia</option>
+                        <option value="ca" class="language">Canada</option>
+                        <option value="ie" class="language">Ireland</option>
+                        <option value="nz" class="language">New Zealand</option>
+                        <option value="sg" class="language">Singapore</option>
+                        <option value="za" class="language">South Africa</option>
+                    </select>
+                </div>
+                <div class="border">
+                    <span class="options">Date</span>
+                    <input type="date" class="options-input" id="date">
+                </div>
+                <div id="logout" class="border options">Logout</div>
+            </div>
+        </div>
+        <div id="notification" class="notification"></div>
+        <script src="script.js"></script>
+    </body>
+
+</html>
