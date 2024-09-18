@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>History</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather&family=Montserrat&family=Open+Sans&family=Roboto+Condensed&display=swap');
+
+            *{
+                color: white;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: "Roboto Condensed", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                background-color: #f0f0f0;
+            }
+            .header {
+                background-color: blueviolet;
+                border-bottom: 2px solid black;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+            .logo {
+                padding: 20px 15px;
+                font-size: 40px;
+                text-decoration: none;
+                font-family: "Bebas Neue", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                text-shadow: 2px 2px 2px black;
+                color: white;
+            }
+            #logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #home,#mode{
+                color: white;
+                font-size: 24px;
+                margin: 15px;
+            }
+            body::-webkit-scrollbar {
+                display: none;
+            }
+            @media (min-width:768px) {
+                .card {
+                    width: 360px;
+                }
+                .button{
+                    font-size: large
+                }
+                #enable,#enable-icon{
+                    font-size: large;
+                }
+                .card-checkbox{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 300px;
+                }
+                .button{
+                    padding: 5px;
+                    font-size: medium
+                }
+                #enable,#enable-icon{
+                    font-size: medium;
+                }
+            }
+
+            @media (max-width: 425px){
+                .logo{
+                    font-size: 30px;
+                    padding: 15px 10px;
+                }
+                #home,#mode{
+                    font-size: 16px;
+                }
+                .card{
+                    width: 360px;
+                }
+                .button{
+                    font-size: small;
+                }
+                .card-checkbox{
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+            main {
+                padding: 20px;
+            }
+
+            .cards-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                column-gap: 15px;
+                row-gap: 30px;
+            }
+
+            .card {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border: 2px solid blueviolet;
+                min-height: 450px;
+                box-shadow: 0 0 8px black;
+                border-radius: 4px;
+                cursor: pointer;
+                background-color: #fff;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .card:hover {
+                box-shadow: 1px 1px 8px #d4ecff;
+                background-color: #f9fdff;
+                transform: translateY(-2px);
+            }
+
+            .card-header {
+                margin-bottom: -4px;
+                position: relative;
+            }
+
+            .card-header img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-bottom: 2px solid blueviolet;
+            }
+
+            .news-source {
+                font-family: "Montserrat", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                color: white;
+                padding: 4px 12px;
+                background-color: blueviolet;
+                margin: 0;
+            }
+
+            #news-title {
+                padding: 12px;
+                color: black;
+                font-family: "Merriweather", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+
+            #cards-main {
+                padding-top: 10px;
+            }
+
+            .news-desc {
+                color: black;
+                padding: 12px;
+                padding-top: 0px;
+                text-overflow: ellipsis;
+                font-family: "Open Sans", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+            .flex{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: blueviolet;
+                padding: 8px 10px;
+                margin: 0;
+            }
+
+            .saved-news{
+                color: white;
+                font-size: 20px;
+            }
+
+            .notification {
+                display: none;
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                color: white;
+                background-color: blueviolet;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+                font-family: "Lato", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+            }
+
+            #social-sharing{
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                background-color: blueviolet;
+                padding: 8px 0;
+            }
+
+            .fa-brands,.fa-comment, .fa-copy{
+                color: white;
+                font-size: 22px;
+            }
+
+            .date-section {
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: row;
+                overflow: hidden;
+                flex-wrap: wrap;
+                column-gap: 15px;
+                row-gap: 30px;
+                align-items: start;
+                justify-content: space-evenly;
+            }
+
+            .date-div{
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                background-color: blueviolet;
+                align-items: center;
+            }
+
+            .date {
+                font-size: large;
+                color: white;
+                padding: 5px;
+            }
+
+
+            .fa-trash{
+                font-size: medium;
+            }
+
+            .delete-date{
+                color: white;
+                font-size: large;
+                padding: 5px;
+            }
+
+            #title{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: darkviolet;
+                color: white;
+                padding: 10px 15px;
+                border-bottom: 2px solid black;
+            }
+
+            #enable-div{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #enable-icon{
+                margin-left: 5px;
+            }
+
+            .button{
+                padding: 5px 10px;
+                border: 1px solid black;
+                color: white;
+                background-color: blueviolet;
+                border-radius: 5px;
+                box-shadow: 0px 0px 4px black;
+            }
+
+            #delete-selected{
+                display: none;
+            }
+
+            .card-checkbox{
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 10;
+                width: 20px;
+                height: 20px;
+                display: none;
+            }
+
+            .delete-news{
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 10;
+                color: white;
+                text-shadow: 1px 1px 15px black;
+                font-size: large;
+            }
+
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+              integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+        <header class="header">
+            <div>
+                <a href="index.html"><i class="fa-solid fa-house" id="home"></i></a>
+            </div>
+            <div id="logo">
+                <div class="logo">THE NOBLE NEWS</div>
+            </div>
+            <div>
+                <i class="fa-solid fa-sun" id="mode"></i>
+            </div>
+        </header>
+        <div id="title">
+            <div id="enable-div">                
+                <span id="enable">Enable Multi-Delete</span>
+                <i id="enable-icon" class="fa-solid fa-toggle-off"></i>
+            </div>
+            <div id="delete-button">
+                <button class="button" id="delete-all">Delete All</button>
+                <button class="button" id="delete-selected">Delete Selected</button>
+            </div>
+        </div>
+        <main id="cards-main">
+            <div class="cards-container" id="cards-container">
+            </div>
+        </main>
+        <template id="template-news-card">
+            <div class="card">
+                <div>
+                    <div class="card-header">
+                        <img src="https://via.placeholder.com/400x200" alt="news-image" onerror="this.src='alt-image.webp';"
+                             id="news-img">
+                        <input type="checkbox" class="card-checkbox" >
+                        <i class="fa-solid fa-trash delete-news" data-title=""></i>
+                    </div>
+                    <div> 
+                        <div class="flex">
+                            <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6><i onclick="saved()" class="saved-news fa-regular fa-floppy-disk"></i>
+                        </div>
+                        <h3 id="news-title">This is the Title</h3>
+                        <p class="news-desc" id="news-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                            saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+                    </div>
+                </div>
+                <div id="social-sharing">
+                    <i class="fa-brands fa-whatsapp" onclick="shareOnWhatsApp()"></i>
+                    <i class="fa-brands fa-facebook" onclick="shareOnFacebook()"></i>
+                    <i class="fa-brands fa-twitter" onclick="shareOnTwitter()"></i>
+                    <i class="fa-solid fa-copy"></i>
+                    <i class="fa-solid fa-comment" onclick="Comments(this)"></i>
+                </div>
+            </div>
+        </template>
+        <div id="notification" class="notification"></div>
+        <script>
+            const Enable = document.getElementById("enable-div");
+            const enableIcon = document.getElementById("enable-icon");
+            const DeleteAll = document.getElementById("delete-all");
+            const DeleteSelected = document.getElementById("delete-selected");
+            Enable.addEventListener("click", function () {
+                if (enableIcon.classList.contains("fa-toggle-off")) {
+                    enableIcon.classList.remove("fa-toggle-off");
+                    enableIcon.classList.add("fa-toggle-on");
+                    DeleteAll.style.display = "none";
+                    DeleteSelected.style.display = "block";
+                    const checkboxes = document.querySelectorAll(".card-checkbox");
+                    checkboxes.forEach(checkbox => {
+                        checkbox.style.display = "block";
+                    });
+                } else {
+                    enableIcon.classList.remove("fa-toggle-on");
+                    enableIcon.classList.add("fa-toggle-off");
+                    DeleteSelected.style.display = "none";
+                    const checkboxes = document.querySelectorAll(".card-checkbox");
+                    checkboxes.forEach(checkbox => {
+                        checkbox.style.display = "none";
+                    });
+                    DeleteAll.style.display = "block";
+                }
+            });
+
+            function saved() {
+                const card = event.target.closest(".card");
+                if (card) {
+                    const email = localStorage.getItem("email");
+                    const newsTitle = card.querySelector("#news-title").innerText;
+                    const newsUrl = card.querySelector(".delete-news").dataset.url;
+                    fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`)
+                            .then(response => response.json())
+                            .then(savedNewsList => {
+                                const isNewsSaved = savedNewsList.some(news => news.title === newsTitle);
+                                if (isNewsSaved) {
+                                    showNotification("News is already saved!");
+                                } else {
+                                    const newsImg = card.querySelector("#news-img").src;
+                                    const newsSource = card.querySelector("#news-source").innerText;
+                                    const newsDesc = card.querySelector("#news-desc").innerText;
+                                    const newsData = {
+                                        email: email,
+                                        img: newsImg,
+                                        title: newsTitle,
+                                        source: newsSource,
+                                        desc: newsDesc,
+                                        url: newsUrl
+                                    };
+                                    fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`, {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify(newsData)
+                                    })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    showNotification("News saved successfully!");
+                                                } else {
+                                                    showNotification("Failed to save news.");
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error("Error saving news:", error);
+                                                showNotification("An error occurred while saving news.");
+                                            });
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error checking saved news:", error);
+                            });
+                }
+            }
+
+            const Mode = document.getElementById("mode");
+            Mode.addEventListener("click", function () {
+                if (Mode.classList.contains("fa-sun")) {
+                    localStorage.setItem("Mode", true);
+                    change(true);
+                } else {
+                    localStorage.setItem("Mode", false);
+                    change(false);
+                }
+            });
+
+            function change(element) {
+                if (element === true) {
+                    Mode.classList.remove("fa-sun");
+                    Mode.classList.add("fa-moon");
+                    document.querySelector("body").style.backgroundColor = "#454545";
+                    let cards = document.querySelectorAll('.card');
+                    cards.forEach(card => {
+                        card.style.backgroundColor = '#454545';
+                    });
+                    let titles = document.querySelectorAll("#news-title");
+                    let descs = document.querySelectorAll(".news-desc");
+                    changeColor([...titles, ...descs], 'white');
+                } else {
+                    Mode.classList.remove("fa-moon");
+                    Mode.classList.add("fa-sun");
+                    document.querySelector("body").style.backgroundColor = "#f0f0f0";
+                    let cards = document.querySelectorAll('.card');
+                    cards.forEach(card => {
+                        card.style.backgroundColor = '#fff';
+                    });
+                    let titles = document.querySelectorAll("#news-title");
+                    let descs = document.querySelectorAll(".news-desc");
+                    changeColor([...titles, ...descs], 'black');
+                }
+            }
+
+            function changeColor(elements, color) {
+                elements.forEach(element => {
+                    element.style.color = color;
+                });
+            }
+
+            function showNotification(message) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification`;
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            function shareOnWhatsApp() {
+                const newsTitle = document.getElementById('news-title').innerText;
+                const newsUrl = window.location.href;
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(newsTitle)} - ${encodeURIComponent(newsUrl)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+
+            function shareOnFacebook() {
+                const newsTitle = document.getElementById('news-title').innerText;
+                const newsUrl = window.location.href;
+                const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(newsUrl)}&quote=${encodeURIComponent(newsTitle)}`;
+                window.open(facebookUrl, '_blank');
+            }
+
+            function shareOnTwitter() {
+                const newsTitle = document.getElementById('news-title').innerText;
+                const newsUrl = window.location.href;
+                const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(newsTitle)}&url=${encodeURIComponent(newsUrl)}`;
+                window.open(twitterUrl, '_blank');
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const mode = localStorage.getItem("Mode");
+                if (mode === "true") {
+                    change(true);
+                } else {
+                    change(false);
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                async function fetchNewsHistory(email) {
+                    try {
+                        const response = await fetch(`/The_Noble_News/HistoryServlet?email=${email}`);
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await response.json();
+                        return data;
+                    } catch (error) {
+                        console.error('Error fetching news history:', error);
+                        return [];
+                    }
+                }
+
+                async function deleteNewsArticle(email, url) {
+                    if (!confirm('Are you sure you want delete this news history?')) {
+                        return;
+                    }
+                    try {
+                        const response = await fetch(`/The_Noble_News/HistoryServlet`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({email, url})
+                        });
+
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete the article.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting news article:', error);
+                    }
+                }
+
+                async function deleteDateNews(email, date) {
+                    if (!confirm('Are you sure you want to delete all news history from this date?')) {
+                        return;
+                    }
+                    try {
+                        const response = await fetch(`/The_Noble_News/HistoryServlet`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({email, date})
+                        });
+
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete news for the date.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting date news:', error);
+                    }
+                }
+
+                async function deleteAllNews(email) {
+                    if (!confirm('Are you sure you want to delete all news history?')) {
+                        return;
+                    }
+                    try {
+                        const response = await fetch(`/The_Noble_News/HistoryServlet`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({email})
+                        });
+
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete all news.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting all news:', error);
+                    }
+                }
+
+                async function deleteSelectedNews(email) {
+                    const checkboxes = document.querySelectorAll('.card-checkbox:checked');
+                    if (checkboxes.length === 0) {
+                        alert('Select at least one news to delete.');
+                        return;
+                    }
+
+                    if (!confirm('Are you sure you want to delete selected news?')) {
+                        return;
+                    }
+
+                    const urls = Array.from(checkboxes).map(checkbox => checkbox.dataset.url);
+
+                    try {
+                        const response = await fetch(`/The_Noble_News/bulkDeleteHistory`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({email, urls})
+                        });
+
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete selected news.');
+                            window.location.reload();
+                        }
+                    } catch (error) {
+                        console.error('Error deleting selected news:', error);
+                    }
+                }
+
+                document.addEventListener('click', function (event) {
+                    const email = localStorage.getItem('email');
+
+                    if (event.target.classList.contains('delete-news')) {
+                        const url = event.target.dataset.url;
+                        if (email && url) {
+                            deleteNewsArticle(email, url);
+                        } else {
+                            console.error('Email or URL not found');
+                        }
+                    }
+
+                    if (event.target.classList.contains('delete-date')) {
+                        const dateElement = event.target.closest('.date-div').querySelector('.date').textContent.trim();
+                        const formattedDate = formatDateForBackend(dateElement);
+                        if (email && formattedDate) {
+                            deleteDateNews(email, formattedDate);
+                        } else {
+                            console.error('Email or date not found');
+                        }
+                    }
+
+                    if (event.target.id === 'delete-all') {
+                        if (email) {
+                            deleteAllNews(email);
+                        } else {
+                            console.error('Email not found');
+                        }
+                    }
+
+                    if (event.target.id === 'delete-selected') {
+                        if (email) {
+                            deleteSelectedNews(email);
+                        } else {
+                            console.error('Email not found');
+                        }
+                    }
+
+                    if (event.target.classList.contains('fa-copy')) {
+                        const card = event.target.closest('.card');
+                        const url = card.getAttribute('data-url');
+                        if (url) {
+                            navigator.clipboard.writeText(url).then(() => {
+                                console.log('URL copied to clipboard!');
+                            }).catch(err => {
+                                console.error('Failed to copy URL: ', err);
+                            });
+                        }
+                    }
+                });
+
+                function formatDateForBackend(dateString) {
+                    const [day, month, year] = dateString.split('-');
+                    return `${year}-${month}-${day}`;
+                }
+
+                function formatDateToDDMMYYYY(dateString) {
+                    const date = new Date(dateString);
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                }
+
+                function createNewsCard(newsItem) {
+                    const template = document.getElementById('template-news-card');
+                    const cardClone = template.content.cloneNode(true);
+
+                    const img = cardClone.querySelector('#news-img');
+                    img.src = newsItem.imageUrl || 'https://via.placeholder.com/400x200';
+                    img.onerror = () => img.src = 'alt-image.webp';
+
+                    const checkbox = cardClone.querySelector('.card-checkbox');
+                    checkbox.dataset.url = newsItem.url;
+
+                    const deleteIcon = cardClone.querySelector('.delete-news');
+                    deleteIcon.dataset.url = newsItem.url;
+
+                    const newsSource = cardClone.querySelector('#news-source');
+                    const formattedDate = formatDateToDDMMYYYY(newsItem.date);
+                    newsSource.textContent = `${newsItem.source} ${formattedDate}`;
+
+                    const newsTitle = cardClone.querySelector('#news-title');
+                    newsTitle.textContent = newsItem.title;
+
+                    const newsDesc = cardClone.querySelector('#news-desc');
+                    newsDesc.textContent = newsItem.description;
+
+                    const cardElement = cardClone.querySelector('.card');
+                    cardElement.setAttribute('data-url', newsItem.url);
+
+                    [img, newsTitle, newsSource, newsDesc].forEach(element => {
+                        element.addEventListener('click', () => {
+                            window.open(newsItem.url, '_blank');
+                        });
+                    });
+
+                    return cardClone;
+                }
+
+                function createDateSection(date, newsItems) {
+                    const dateDiv = document.createElement('div');
+                    dateDiv.className = 'date-div';
+
+                    const dateElement = document.createElement('div');
+                    dateElement.className = 'date';
+                    dateElement.textContent = formatDateToDDMMYYYY(date);
+
+                    const deleteDateIcon = document.createElement('i');
+                    deleteDateIcon.className = 'fa-solid fa-trash delete-date';
+                    deleteDateIcon.title = 'Delete all news from this date';
+
+                    dateDiv.appendChild(dateElement);
+                    dateDiv.appendChild(deleteDateIcon);
+
+                    const dateSection = document.createElement('div');
+                    dateSection.className = 'date-section';
+
+                    newsItems.forEach(newsItem => {
+                        const newsCard = createNewsCard(newsItem);
+                        dateSection.appendChild(newsCard);
+                    });
+
+                    return [dateDiv, dateSection];
+                }
+
+                async function displayNews() {
+                    const email = localStorage.getItem('email');
+                    if (!email) {
+                        console.error('No email found in localStorage');
+                        return;
+                    }
+
+                    const newsHistory = await fetchNewsHistory(email);
+                    const container = document.getElementById('cards-container');
+
+                    const groupedNews = newsHistory.reduce((acc, newsItem) => {
+                        const date = newsItem.date.split(' ')[0];
+                        if (!acc[date]) {
+                            acc[date] = [];
+                        }
+                        acc[date].push(newsItem);
+                        return acc;
+                    }, {});
+
+                    container.innerHTML = '';
+
+                    const sortedDates = Object.keys(groupedNews).sort((a, b) => new Date(b) - new Date(a));
+
+                    sortedDates.forEach(date => {
+                        const [dateDiv, dateSection] = createDateSection(date, groupedNews[date]);
+                        container.appendChild(dateDiv);
+                        container.appendChild(dateSection);
+                    });
+                }
+                displayNews();
+            });
+
+            function Comments(commentIcon) {
+                const card = commentIcon.closest('.card');
+                const imgSrc = card.querySelector('#news-img').src;
+                const title = card.querySelector('#news-title').textContent;
+                const source = card.querySelector('#news-source').textContent;
+                const description = card.querySelector('#news-desc').textContent;
+                const url = card.getAttribute('data-url');
+                const email = localStorage.getItem('email');
+                const commentPageData = {
+                    imgSrc: imgSrc,
+                    title: title,
+                    source: source,
+                    description: description,
+                    url: url,
+                    email: email
+                };
+                localStorage.setItem('commentPageData', JSON.stringify(commentPageData));
+                window.location.href = 'Comments.html';
+            }
+        </script>
+    </body>
+</html>

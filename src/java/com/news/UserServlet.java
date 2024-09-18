@@ -25,7 +25,7 @@ public class UserServlet extends HttpServlet {
     private Connection connect() {
         String jdbcURL = "jdbc:mysql://localhost:3306/user_login_db";
         String dbUser = "root";
-        String dbPassword = "123456";
+        String dbPassword = "rizw@nKing777";
         Connection conn = null;
 
         try {
@@ -90,26 +90,36 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("register-password");
 
         try (Connection conn = connect()) {
+            // Check if email already exists
             String checkEmailSql = "SELECT * FROM users WHERE email = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkEmailSql);
-            checkStmt.setString(1, email);
-            ResultSet emailResult = checkStmt.executeQuery();
+            PreparedStatement checkEmailStmt = conn.prepareStatement(checkEmailSql);
+            checkEmailStmt.setString(1, email);
+            ResultSet emailResult = checkEmailStmt.executeQuery();
 
             if (emailResult.next()) {
                 out.println("{\"status\": \"error\", \"message\": \"Email already registered. Please use a different email.\"}");
             } else {
-                String encryptedPassword = EncryptionUtil.encrypt(password);
-                String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, username);
-                stmt.setString(2, email);
-                stmt.setString(3, encryptedPassword);
+                String checkUsernameSql = "SELECT * FROM users WHERE username = ?";
+                PreparedStatement checkUsernameStmt = conn.prepareStatement(checkUsernameSql);
+                checkUsernameStmt.setString(1, username);
+                ResultSet usernameResult = checkUsernameStmt.executeQuery();
 
-                int rowsInserted = stmt.executeUpdate();
-                if (rowsInserted > 0) {
-                    out.println("{\"status\": \"success\", \"message\": \"Registration successful. Please login.\"}");
+                if (usernameResult.next()) {
+                    out.println("{\"status\": \"error\", \"message\": \"Username already exists. Please choose a different username.\"}");
                 } else {
-                    out.println("{\"status\": \"error\", \"message\": \"Registration failed. Please try again.\"}");
+                    String encryptedPassword = EncryptionUtil.encrypt(password);
+                    String insertSql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+                    PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+                    insertStmt.setString(1, username);
+                    insertStmt.setString(2, email);
+                    insertStmt.setString(3, encryptedPassword);
+
+                    int rowsInserted = insertStmt.executeUpdate();
+                    if (rowsInserted > 0) {
+                        out.println("{\"status\": \"success\", \"message\": \"Registration successful. Please login.\"}");
+                    } else {
+                        out.println("{\"status\": \"error\", \"message\": \"Registration failed. Please try again.\"}");
+                    }
                 }
             }
         }
