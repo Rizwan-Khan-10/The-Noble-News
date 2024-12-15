@@ -37,7 +37,7 @@ public class BulkDelete extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query = "DELETE FROM saved_news WHERE email = ? AND url = ?";
             ps = con.prepareStatement(query);
@@ -47,7 +47,7 @@ public class BulkDelete extends HttpServlet {
             for (NewsData newsData : newsDataArray) {
                 if (newsData.getUrl() != null && newsData.getEmail() != null) {
                     ps.setString(1, newsData.getEmail());
-                    ps.setString(2, newsData.getUrl()); // Using URL for deletion
+                    ps.setString(2, newsData.getUrl());
                     deletedCount += ps.executeUpdate();
                 }
             }

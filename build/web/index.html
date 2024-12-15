@@ -23,7 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <nav class="navbar">
                 <ul class="nav-list">
                     <li id="Home" class="nav-item" onclick="reload()" data-translate="home" data-category="home">Home</li>
-                    <li class="nav-item"><a id="About-us" href="AboutUs.html">About us</a></li>
+                    <li class="nav-item"><a id="About-us" href="AboutUs.html" data-translate="aboutUs">About us</a></li>
                     <li class="nav-item" id="top-headlines" data-translate="Breaking News" onclick="onNavItemClick('top-headlines')" data-category="top-headlines">Breaking News</li>
                     <li id="World" class="nav-item" onclick="onNavItemClick('World')" data-translate="world" data-category="world">World</li>
                     <li id="Politics" class="nav-item" onclick="onNavItemClick('Politics')" data-translate="politics" data-category="politics">Politics</li>
@@ -76,7 +76,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div class="social-sharing">
                     <i class="fa-brands fa-whatsapp" onclick="shareOnWhatsApp()"></i>
                     <i class="fa-brands fa-facebook" onclick="shareOnFacebook()"></i>
-                    <i class="fa-brands fa-twitter" onclick="shareOnTwitter()"></i>
+                    <i class="fa-brands fa-x-twitter" onclick="shareOnTwitter()"></i>
                     <i class="fa-solid fa-copy"></i>
                     <i class="fa-solid fa-comment" onclick="Comments(this)"></i>
                 </div>
@@ -105,15 +105,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <form action="UserServlet" method="post" id="register-form">
                     <span class="form-span">Create Account</span>
                     <label for="register-username" class="login-page-label">Username</label>
-                    <input type="text" id="register-username" class="login-page-input" placeholder="Enter Your Username"
-                           name="register-username" required>
+                    <input type="text" id="register-username" class="login-page-input" placeholder="Enter Your Username" name="register-username" required>
                     <label for="register-email" class="login-page-label">Email</label>
-                    <input type="text" id="register-email" class="login-page-input" placeholder="Enter Your Email"
-                           name="register-email" required>
+                    <input type="text" id="register-email" class="login-page-input" placeholder="Enter Your Email" name="register-email" required>
                     <label for="register-password" class="login-page-label">Password</label>
-                    <input type="password" id="register-password" class="login-page-input" placeholder="Enter Your Password"
-                           name="register-password" required>
-                    <input type="hidden" name="action" value="register">
+                    <input type="password" id="register-password" class="login-page-input" placeholder="Enter Your Password" name="register-password" required>
                     <button type="submit" id="registered" class="login-page-button">Register</button>
                 </form>
                 <div id="hide-register">

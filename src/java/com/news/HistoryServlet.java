@@ -46,7 +46,7 @@ public class HistoryServlet extends HttpServlet {
             String date = sdf.format(new java.util.Date());
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query = "INSERT INTO user_history (email, news_title, news_url, image_url, news_source, news_desc, news_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
@@ -88,7 +88,7 @@ public class HistoryServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query = "SELECT news_title, news_url, image_url, news_source, news_desc, news_date FROM user_history WHERE email = ?";
             PreparedStatement ps = con.prepareStatement(query);
@@ -136,25 +136,22 @@ public class HistoryServlet extends HttpServlet {
             String date = json.has("date") ? json.get("date").getAsString() : null;
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query;
             PreparedStatement ps;
 
             if (url != null) {
-                // Delete a specific article based on the URL
                 query = "DELETE FROM user_history WHERE email = ? AND news_url = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, email);
                 ps.setString(2, url);
             } else if (date != null) {
-                // Delete all news for a specific date (ensure the date is in YYYY-MM-DD format)
                 query = "DELETE FROM user_history WHERE email = ? AND DATE(news_date) = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, email);
                 ps.setString(2, date);
             } else {
-                // Delete all news for the user
                 query = "DELETE FROM user_history WHERE email = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, email);

@@ -25,7 +25,7 @@ public class UserServlet extends HttpServlet {
     private Connection connect() {
         String jdbcURL = "jdbc:mysql://localhost:3306/user_login_db";
         String dbUser = "root";
-        String dbPassword = "rizw@nKing777";
+        String dbPassword = "123456";
         Connection conn = null;
 
         try {
@@ -90,7 +90,6 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("register-password");
 
         try (Connection conn = connect()) {
-            // Check if email already exists
             String checkEmailSql = "SELECT * FROM users WHERE email = ?";
             PreparedStatement checkEmailStmt = conn.prepareStatement(checkEmailSql);
             checkEmailStmt.setString(1, email);
@@ -128,10 +127,10 @@ public class UserServlet extends HttpServlet {
     private void loginUser(HttpServletRequest request, HttpServletResponse response, PrintWriter out) throws Exception {
         String email = request.getParameter("login-email");
         String password = request.getParameter("login-password");
-        response.setContentType("text/plain");
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try (Connection conn = connect()) {
-            String sql = "SELECT * FROM users WHERE email = ?";
+            String sql = "SELECT username, password FROM users WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
 
@@ -142,7 +141,8 @@ public class UserServlet extends HttpServlet {
                 String decryptedPassword = EncryptionUtil.decrypt(encryptedPassword);
 
                 if (decryptedPassword.equals(password)) {
-                    out.println(String.format("{\"status\": \"success\", \"message\": \"Login successful!\", \"email\": \"%s\"}", email));
+                    String username = rs.getString("username"); 
+                    out.println(String.format("{\"status\": \"success\", \"message\": \"Welcome %s\", \"email\": \"%s\", \"username\": \"%s\"}", username, email, username));
 
                 } else {
                     out.println("{\"status\": \"error\", \"message\": \"Invalid password.\"}");

@@ -354,7 +354,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div id="social-sharing">
                     <i class="fa-brands fa-whatsapp" onclick="shareOnWhatsApp()"></i>
                     <i class="fa-brands fa-facebook" onclick="shareOnFacebook()"></i>
-                    <i class="fa-brands fa-twitter" onclick="shareOnTwitter()"></i>
+                    <i class="fa-brands fa-x-twitter" onclick="shareOnTwitter()"></i>
                     <i class="fa-solid fa-copy"></i>
                     <i class="fa-solid fa-comment" onclick="Comments(this)"></i>
                 </div>
@@ -483,7 +483,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 });
 
                                 cardsContainer.appendChild(dateSection);
-
+                                const mode = localStorage.getItem("Mode");
+                                if (mode === "true") {
+                                    change(true);
+                                } else {
+                                    change(false);
+                                }
                                 deleteDate.addEventListener('click', () => {
                                     deleteNewsByDate(date, email);
                                 });
@@ -499,7 +504,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({url, email})  
+                        body: JSON.stringify({url, email})
                     })
                             .then(response => response.json())
                             .then(data => {
@@ -564,9 +569,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         const newsCard = checkbox.closest('.card');
-                        const url = newsCard.getAttribute('data-url'); // Use the data-url attribute to get the URL
+                        const url = newsCard.getAttribute('data-url');
 
-                        selectedNews.push({url, email}); // Pass the URL instead of title
+                        selectedNews.push({url, email});
                     }
                 });
 
@@ -618,8 +623,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             });
 
-            function change(element){
-                if(element === true){
+            function change(element) {
+                if (element === true) {
                     Mode.classList.remove("fa-sun");
                     Mode.classList.add("fa-moon");
                     document.querySelector("body").style.backgroundColor = "#454545";
@@ -630,7 +635,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     let titles = document.querySelectorAll("#news-title");
                     let descs = document.querySelectorAll(".news-desc");
                     changeColor([...titles, ...descs], 'white');
-                }else{
+                } else {
                     Mode.classList.remove("fa-moon");
                     Mode.classList.add("fa-sun");
                     document.querySelector("body").style.backgroundColor = "#f0f0f0";
@@ -721,15 +726,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             console.log(error);
                         });
             }
-            
-            document.addEventListener("DOMContentLoaded", () => {
-                const mode = localStorage.getItem("Mode");
-                if (mode === "true") {
-                    change(true);
-                } else {
-                    change(false);
-                }
-            });
+
         </script>
     </body>
 </html>

@@ -99,7 +99,8 @@ document.getElementById('login-form').addEventListener('submit', function (e) {
 
                     if (parsedData.status === 'success') {
                         localStorage.setItem("email", parsedData.email);
-                        alert('Login successful!');
+                        localStorage.setItem("username", parsedData.username);
+                        showNotification('Welcome ' + localStorage.getItem('username'));
                         LoginPage.style.display = "none";
                         document.getElementById("display-login").style.display = "none";
                         document.getElementById("display-profile").style.display = "block";
@@ -219,7 +220,7 @@ async function fetchWithRetry(endpoint) {
             console.error("Error fetching data:", error.message);
             retries--;
             if (retries <= 0) {
-                alert("Failed to fetch news after using all API keys. Please try again later.");
+                showNotification("Failed to fetch news after using all API keys. Please try again later.");
             }
         }
     }
@@ -288,53 +289,6 @@ async function fetchNews(query = "", selectedLanguage = "en") {
     } catch (error) {
         console.error("Error fetching news:", error);
 }
-}
-
-let lastBreakingNewsId = localStorage.getItem("lastBreakingNewsId") || "";
-const breakingNewsFetchInterval = 15 * 60 * 1000; // 15 minutes
-
-async function fetchBreakingNews() {
-    try {
-        const today = new Date();
-        const startDate = new Date(today);
-        startDate.setDate(today.getDate() - 1);
-        const startDateString = startDate.toISOString().split('T')[0];
-        const endDateString = today.toISOString().split('T')[0];
-
-        const endpoint = `${url}breaking-news&from=${startDateString}&to=${endDateString}&apiKey=${getApiKey()}&language=en`;
-        const data = await fetchWithRetry(endpoint);
-
-        if (data.articles && data.articles.length > 0) {
-            let latestBreakingNews = null;
-            let oldBreakingNews = [];
-
-            for (let article of data.articles) {
-                const newsDate = new Date(article.publishedAt).toISOString().split('T')[0];
-                const todayString = today.toISOString().split('T')[0];
-
-                if (newsDate === todayString && article.title !== lastBreakingNewsId) {
-                    latestBreakingNews = article;
-                } else {
-                    oldBreakingNews.push(article);
-                }
-            }
-
-            if (latestBreakingNews && latestBreakingNews.title !== lastBreakingNewsId) {
-                lastBreakingNewsId = latestBreakingNews.title;
-                localStorage.setItem("lastBreakingNewsId", lastBreakingNewsId);
-
-                const userResponse = confirm("Breaking News found! Do you want to see it?");
-                if (userResponse) {
-                    localStorage.setItem("breakingNews", JSON.stringify({latest: latestBreakingNews, old: oldBreakingNews}));
-                    window.open("BreakingNews.html", "_blank");
-                }
-            } else {
-                localStorage.setItem("breakingNews", JSON.stringify({latest: null, old: oldBreakingNews}));
-            }
-        }
-    } catch (error) {
-        console.error("Error fetching breaking news:", error);
-    }
 }
 
 function bindData(articles) {
@@ -478,13 +432,67 @@ searchText.addEventListener("keyup", (event) => {
     }
 });
 
+let lastBreakingNewsUrl = "";
+
+async function fetchBreakingNews() {
+    try {
+        const articles = [];
+        const currentDate = new Date();
+
+        for (let i = 0; i < 3; i++) {
+            const date = new Date(currentDate);
+            date.setDate(currentDate.getDate() - i);
+            const formattedDate = date.toISOString().split('T')[0];
+            const dateQuery = `&from=${formattedDate}T00:00:00Z&to=${formattedDate}T23:59:59Z`;
+            const endpoint = `${url}top-headlines${dateQuery}&apiKey=${getApiKey()}&language=en`;
+
+            const data = await fetchWithRetry(endpoint);
+
+            if (data.articles && data.articles.length > 0) {
+                const sortedArticles = data.articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                articles.push(...sortedArticles.slice(0, Math.max(sortedArticles.length, 10)));
+            }
+        }
+
+        if (articles.length === 0) {
+            alert("No breaking news found");
+            onNavItemClick('Home');
+        } else {
+            const recentNews = JSON.parse(localStorage.getItem("recentNews"));
+            let recentNewsTime = recentNews ? new Date(recentNews.publishedAt).getTime() : 0;
+
+            for (let article of articles) {
+                const articleTime = new Date(article.publishedAt).getTime();
+                if (article.url !== lastBreakingNewsUrl && articleTime > recentNewsTime) {
+                    lastBreakingNewsUrl = article.url;
+                    localStorage.setItem("recentNews", JSON.stringify({
+                        title: article.title,
+                        description: article.description,
+                        url: article.url,
+                        urlToImage: article.urlToImage,
+                        source: article.source.name,
+                        publishedAt: article.publishedAt
+                    }));
+
+                    const userResponse = confirm("New breaking news found! Do you want to see it?");
+                    if (userResponse) {
+                        window.location.href = "BreakingNews.html";
+                    }
+                    return;
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching breaking news:", error);
+    }
+}
 
 function startBreakingNewsFetch() {
-    fetchBreakingNews();
-    setInterval(fetchBreakingNews, breakingNewsFetchInterval);
+    setInterval(fetchBreakingNews, 15 * 60 * 1000);
 }
 
 window.addEventListener("load", () => {
+    fetchBreakingNews();
     syncLanguageWithCountry();
     fetchNews();
     startBreakingNewsFetch();
@@ -512,7 +520,8 @@ const translations = {
         entertainment: "Entertainment",
         lifestyle: "Lifestyle",
         environment: "Environment",
-        crime: "Crime"
+        crime: "Crime",
+        aboutUs: "About Us"  
     },
     hi: {
         home: "मुख्य पृष्ठ",
@@ -528,7 +537,8 @@ const translations = {
         entertainment: "मनोरंजन",
         lifestyle: "लाइफस्टाइल",
         environment: "पर्यावरण",
-        crime: "अपराध"
+        crime: "अपराध",
+        aboutUs: "हमारे बारे में"  
     },
     mr: {
         home: "मुख्य पृष्ठ",
@@ -544,7 +554,8 @@ const translations = {
         entertainment: "मनोरंजन",
         lifestyle: "लाइफस्टाइल",
         environment: "पर्यावरण",
-        crime: "अपराध"
+        crime: "अपराध",
+        aboutUs: "आमच्याबद्दल"  
     }
 };
 
@@ -561,6 +572,7 @@ Logout.addEventListener("click", function () {
     document.getElementById("display-profile").style.display = "none";
     document.getElementById("display-login").style.display = "block";
     localStorage.removeItem("email");
+    localStorage.removeItem("username");
     const savedNewsIcons = document.querySelectorAll(".saved-news");
     savedNewsIcons.forEach(icon => {
         icon.style.display = "none";
@@ -644,51 +656,51 @@ function saved() {
         const newsUrl = card.querySelector("#news-title").getAttribute("data-url").trim();
 
         fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`)
-            .then(response => response.json())
-            .then(savedNewsList => {
-                const isNewsSaved = savedNewsList.some(news => news.url.trim() === newsUrl);
+                .then(response => response.json())
+                .then(savedNewsList => {
+                    const isNewsSaved = savedNewsList.some(news => news.url.trim() === newsUrl);
 
-                if (isNewsSaved) {
-                    showNotification("This news is already saved!");
-                } else {
-                    const newsImg = card.querySelector("#news-img").src;
-                    const newsTitle = card.querySelector("#news-title").innerText.trim();
-                    const newsSource = card.querySelector("#news-source").innerText.trim();
-                    const newsDesc = card.querySelector("#news-desc").innerText.trim();
+                    if (isNewsSaved) {
+                        showNotification("This news is already saved!");
+                    } else {
+                        const newsImg = card.querySelector("#news-img").src;
+                        const newsTitle = card.querySelector("#news-title").innerText.trim();
+                        const newsSource = card.querySelector("#news-source").innerText.trim();
+                        const newsDesc = card.querySelector("#news-desc").innerText.trim();
 
-                    const newsData = {
-                        email: email,
-                        img: newsImg,
-                        title: newsTitle,
-                        url: newsUrl,
-                        source: newsSource,
-                        desc: newsDesc
-                    };
+                        const newsData = {
+                            email: email,
+                            img: newsImg,
+                            title: newsTitle,
+                            url: newsUrl,
+                            source: newsSource,
+                            desc: newsDesc
+                        };
 
-                    fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(newsData)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            showNotification("News saved successfully!");
-                        } else {
-                            showNotification("Failed to save news.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error saving news:", error);
-                        showNotification("An error occurred while saving the news.");
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error checking saved news:", error);
-            });
+                        fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(newsData)
+                        })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showNotification("News saved successfully!");
+                                    } else {
+                                        showNotification("Failed to save news.");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error saving news:", error);
+                                    showNotification("An error occurred while saving the news.");
+                                });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking saved news:", error);
+                });
     }
 }
 

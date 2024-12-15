@@ -65,6 +65,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 }
             }
 
+            @media (min-width: 840px){
+                #message{
+                    font-size: 20px;
+                }
+            }
+
+            @media (max-width: 840px){
+                #message{
+                    font-size: 18px;
+                }
+            }
+
             @media (max-width: 768px){
                 #cards-container{
                     width: 360px;
@@ -93,6 +105,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 #home,#mode{
                     font-size: 16px;
                 }
+                #message{
+                    font-size: 16px;
+                }
+            }
+
+            @media (max-width: 340px){
+                #message{
+                    font-size: 14px;
+                }
             }
 
             .card {
@@ -105,6 +126,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 border-radius: 4px;
                 cursor: pointer;
                 overflow: hidden;
+                background-color: #fff;
                 transition: all 0.3s ease;
             }
 
@@ -136,12 +158,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
             #news-title {
                 padding: 12px;
+                color: black;
                 font-family: "Merriweather", serif;
                 font-weight: 400;
                 font-style: normal;
             }
 
             .news-desc {
+                color: black;
                 padding: 12px;
                 padding-top: 0px;
                 text-overflow: ellipsis;
@@ -193,6 +217,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             }
 
             #comments{
+                position: relative;
+                min-height: 430px;
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
@@ -260,16 +286,52 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 font-family: "Merriweather", serif;
             }
 
-            .username,.user-info i,.comment-date{
-                font-size: medium;
+            .user-info{
+                display: flex;
+                column-gap: 10px;
+                align-items: center;
+            }
+
+            .user-details{
+                display: flex;
+                flex-direction: column;
+            }
+
+            .user-info{
+                font-size: x-large;
+            }
+
+            .username{
+                font-size: large;
+            }
+
+            .comment-date{
+                font-size: small;
             }
 
             .user-comment{
                 font-family: "Open Sans", sans-serif;
                 color: black;
-                border: 1px solid white;
-                box-shadow: 0px 0px 4px black;
-                padding: 5px 8px;
+                padding: 8px;
+                border-bottom: 1px solid white;
+            }
+
+            .response{
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 5px 0px;
+                background-color: blueviolet;
+            }
+
+            #message{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                display: none;
+                white-space: nowrap;
+                text-align: center;
             }
 
         </style>
@@ -296,26 +358,39 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <input type="text" id="input-comment" placeholder="Add a comment....">
                     <i class="fa-solid fa-plus" id="add"></i>
                 </div>
+                <div id="message"></div>
                 <div class="comments-card"></div>
             </div>
         </main>
         <template id="template-new-comment">
-            <div class="comment-card">
+            <div class="comment-card comment-container" data-id="">
                 <div class="comment-info">
                     <div class="user-info">
                         <i class="fa-solid fa-circle-user"></i>
-                        <span class="username">UserName</span>
+                        <div class="user-details">
+                            <span class="username">UserName</span>
+                            <span class="comment-date"></span>
+                        </div>
                     </div>
-                    <div class="comment-date"></div>
+                    <i class="fa-solid fa-trash"></i>
                 </div>
                 <div class="user-comment">
                     gejssv ureeg rgrg fdbrbr bb re gb regr grhfbv eefehfb ehvb
+                </div>
+                <div class="response">
+                    <div class="like">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <span class="thumbs-up-count">0</span>
+                    </div>
+                    <div class="dislike">
+                        <i class="fa-regular fa-thumbs-down"></i>
+                        <span class="thumbs-down-count">0</span>
+                    </div>
                 </div>
             </div>
         </template>
         <div id="notification" class="notification"></div>
         <script>
-
             const Mode = document.getElementById("mode");
             Mode.addEventListener("click", function () {
                 if (Mode.classList.contains("fa-sun")) {
@@ -326,11 +401,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     change(false);
                 }
             });
-            
-            function change(element){
-                if(element===true){
+
+            function change(element) {
+                if (element === true) {
                     Mode.classList.remove("fa-sun");
                     Mode.classList.add("fa-moon");
+                    let message = document.getElementById("message");
                     document.querySelector("body").style.backgroundColor = "#454545";
                     document.getElementById("comments").style.backgroundColor = "#454545";
                     let cards = document.querySelectorAll('.card');
@@ -340,10 +416,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     let titles = document.querySelectorAll("#news-title");
                     let descs = document.querySelectorAll(".news-desc");
                     let comment = document.querySelectorAll(".user-comment");
-                    changeColor([...titles, ...descs, ...comment], 'white');
-                }else{
+                    changeColor([...titles, ...descs, ...comment, message], 'white');
+                } else {
                     Mode.classList.remove("fa-moon");
                     Mode.classList.add("fa-sun");
+                    let message = document.getElementById("message");
                     document.querySelector("body").style.backgroundColor = "#f0f0f0";
                     document.getElementById("comments").style.backgroundColor = "white";
                     let cards = document.querySelectorAll('.card');
@@ -353,9 +430,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     let titles = document.querySelectorAll("#news-title");
                     let descs = document.querySelectorAll(".news-desc");
                     let comment = document.querySelectorAll(".user-comment");
-                    changeColor([...titles, ...descs, ...comment], 'black');
+                    changeColor([...titles, ...descs, ...comment, message], 'black');
                 }
             }
+
             function changeColor(elements, color) {
                 elements.forEach(element => {
                     element.style.color = color;
@@ -396,22 +474,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     notification.style.display = 'none';
                 }, 3000);
             }
-            
-            document.addEventListener("DOMContentLoaded", () => {
-                const mode = localStorage.getItem("Mode");
-                if (mode === "true") {
-                    change(true);
-                } else {
-                    change(false);
-                }
-            });
-            
+
             document.addEventListener("DOMContentLoaded", function () {
                 const commentData = JSON.parse(localStorage.getItem('commentPageData'));
+                const loggedInUserEmail = localStorage.getItem('email');
                 if (commentData) {
                     const cardContainer = document.getElementById('cards-container');
-                    const cardTemplate = `
-            <div class="card">
+                    const cardTemplate =
+                            `<div class="card">
                 <div>
                     <div class="card-header">
                         <img src="${commentData.imgSrc}" alt="news-image" onerror="this.src='alt-image.webp';" id="news-img" data-url="${commentData.url}">
@@ -428,13 +498,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div id="social-sharing">
                     <i class="fa-brands fa-whatsapp" onclick="shareOnWhatsApp()"></i>
                     <i class="fa-brands fa-facebook" onclick="shareOnFacebook()"></i>
-                    <i class="fa-brands fa-twitter" onclick="shareOnTwitter()"></i>
+                    <i class="fa-brands fa-x-twitter" onclick="shareOnTwitter()"></i>
                     <i class="fa-solid fa-copy" id="copy-url"></i>
                 </div>
-            </div>
-        `;
+            </div>`;
                     cardContainer.innerHTML = cardTemplate;
-
+                    const mode = localStorage.getItem("Mode");
+                    if (mode === "true") {
+                        change(true);
+                    } else {
+                        change(false);
+                    }
                     const copyIcon = document.getElementById('copy-url');
                     copyIcon.addEventListener('click', function () {
                         const url = commentData.url;
@@ -442,9 +516,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             showNotification('URL copied to clipboard!');
                         }).catch(function (err) {
                             console.error('Could not copy text: ', err);
+                            showNotification('Failed to copy URL.');
                         });
                     });
-
                     const clickableElements = [
                         document.getElementById('news-title'),
                         document.getElementById('news-img'),
@@ -474,6 +548,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 });
                                 const result = await response.json();
                                 if (result.status === 'success') {
+                                    const Message = document.getElementById("message");
+                                    Message.style.display = "none";
                                     showNotification('Comment added successfully!');
                                     document.getElementById('input-comment').value = '';
                                     fetchComments(url);
@@ -488,7 +564,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             showNotification('Please enter a comment.');
                         }
                     });
-
                     fetchComments(commentData.url);
                 } else {
                     showNotification('No data available.');
@@ -503,10 +578,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
                         const data = await response.json();
                         if (data.status === 'no_comments') {
-                            showNotification(data.message);
-                            document.querySelector('.comments-card').innerHTML = ''; // Clear comments
+                            const Message = document.getElementById("message");
+                            Message.style.display = "block";
+                            Message.innerHTML = data.message;
+                            document.querySelector('.comments-card').innerHTML = '';
                         } else if (data.status === 'success') {
-                            displayComments(data.comments);
+                            const likeDislikeData = await fetchLikeDislikeData();
+                            displayComments(data.comments, likeDislikeData);
                         } else {
                             showNotification('Error fetching comments.');
                         }
@@ -516,32 +594,202 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     }
                 }
 
-                function displayComments(comments) {
+                function displayComments(comments, likeDislikeData) {
                     const commentsContainer = document.querySelector('.comments-card');
                     const template = document.getElementById('template-new-comment');
-                    commentsContainer.innerHTML = ''; // Clear existing comments
+                    commentsContainer.innerHTML = '';
 
                     comments.forEach(comment => {
                         const commentClone = template.content.cloneNode(true);
                         const usernameSpan = commentClone.querySelector('.username');
                         const commentText = commentClone.querySelector('.user-comment');
                         const commentDate = commentClone.querySelector('.comment-date');
+                        const deleteIcon = commentClone.querySelector('.fa-trash');
+                        const thumbsUpIcon = commentClone.querySelector('.fa-thumbs-up');
+                        const thumbsDownIcon = commentClone.querySelector('.fa-thumbs-down');
+                        const thumbsUpCount = commentClone.querySelector('.thumbs-up-count');
+                        const thumbsDownCount = commentClone.querySelector('.thumbs-down-count');
 
                         usernameSpan.textContent = comment.username;
                         commentText.textContent = comment.comment;
-                        commentDate.textContent = new Date(comment.date).toLocaleDateString();
+                        commentDate.textContent = formatTimeAgo(new Date(comment.date));
+                        thumbsUpCount.textContent = comment.thumbsUpCount || 0;
+                        thumbsDownCount.textContent = comment.thumbsDownCount || 0;
 
+                        const commentId = comment.id;
+                        const likeStatus = likeDislikeData.hasOwnProperty(commentId) ? likeDislikeData[commentId] : undefined;
+                        if (likeStatus === 'like') {
+                            thumbsUpIcon.classList.remove('fa-regular');
+                            thumbsUpIcon.classList.add('fa-solid');
+                        } else if (likeStatus === 'dislike') {
+                            thumbsDownIcon.classList.remove('fa-regular');
+                            thumbsDownIcon.classList.add('fa-solid');
+                        }
+
+                        commentClone.querySelector('.comment-container').setAttribute('data-comment-id', comment.id);
+                        thumbsUpIcon.addEventListener('click', () => {
+                            handleThumbs(comment.id, 'thumbsUp', thumbsUpIcon, thumbsUpCount, thumbsDownIcon, thumbsDownCount);
+                        });
+                        thumbsDownIcon.addEventListener('click', () => {
+                            handleThumbs(comment.id, 'thumbsDown', thumbsDownIcon, thumbsDownCount, thumbsUpIcon, thumbsUpCount);
+                        });
+
+                        if (comment.email === loggedInUserEmail) {
+                            deleteIcon.style.display = 'inline';
+                            deleteIcon.addEventListener('click', function () {
+                                deleteComment(comment.id);
+                            });
+                        } else {
+                            deleteIcon.style.display = 'none';
+                        }
                         commentsContainer.appendChild(commentClone);
+                        const mode = localStorage.getItem("Mode");
+                        if (mode === "true") {
+                            change(true);
+                        } else {
+                            change(false);
+                        }
                     });
+                }
+
+                async function fetchLikeDislikeData() {
+                    const username = localStorage.getItem("username");
+                    try {
+                        const response = await fetch(`/The_Noble_News/LikeDislikeServlet?username=${encodeURIComponent(username)}`);
+                        const result = await response.json();
+                        if (result.status === 'success') {
+                            return result.likesdislikes;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching like/dislike data:', error);
+                    }
+                    return {};
+                }
+
+                async function deleteComment(commentId) {
+                    const userConfirmed = confirm('Are you sure you want to delete this comment?');
+                    if (userConfirmed) {
+                        try {
+                            const email = localStorage.getItem("email");
+                            const response = await fetch(`/The_Noble_News/CommentsServlet?commentId=${commentId}&email=${encodeURIComponent(email)}`, {
+                                method: 'DELETE'  
+                            });
+                            const result = await response.json();
+                            if (result.status === 'success') {
+                                showNotification('Comment deleted successfully!');
+                                fetchComments(commentData.url);  
+                            } else {
+                                showNotification('Failed to delete comment.');
+                            }
+                        } catch (error) {
+                            console.error('Error deleting comment:', error);
+                            showNotification('Server error: Could not delete comment.');
+                        }
+                    }
+                }
+
+                function handleThumbs(commentId, type, clickedIcon, countElement, oppositeIcon, oppositeCountElement) {
+                    if (oppositeIcon.classList.contains('fa-solid')) {
+                        oppositeIcon.classList.remove('fa-solid');
+                        oppositeIcon.classList.add('fa-regular');
+                        let currentOppositeCount = parseInt(oppositeCountElement.textContent, 10);
+                        oppositeCountElement.textContent = currentOppositeCount - 1;
+                    }
+
+                    if (type === 'thumbsUp') {
+                        if (clickedIcon.classList.contains('fa-regular')) {
+                            clickedIcon.classList.remove('fa-regular');
+                            clickedIcon.classList.add('fa-solid');
+                            let currentCount = parseInt(countElement.textContent, 10);
+                            countElement.textContent = currentCount + 1;
+                            type = 'like';
+                        } else if (clickedIcon.classList.contains('fa-solid')) {
+                            clickedIcon.classList.remove('fa-solid');
+                            clickedIcon.classList.add('fa-regular');
+                            let currentCount = parseInt(countElement.textContent, 10);
+                            countElement.textContent = currentCount - 1;
+                            type = 'like-none';
+                        }
+                    }
+
+                    if (type === 'thumbsDown') {
+                        if (clickedIcon.classList.contains('fa-regular')) {
+                            clickedIcon.classList.remove('fa-regular');
+                            clickedIcon.classList.add('fa-solid');
+                            let currentCount = parseInt(countElement.textContent, 10);
+                            countElement.textContent = currentCount + 1;
+                            type = 'dislike';
+                        } else if (clickedIcon.classList.contains('fa-solid')) {
+                            clickedIcon.classList.remove('fa-solid');
+                            clickedIcon.classList.add('fa-regular');
+                            let currentCount = parseInt(countElement.textContent, 10);
+                            countElement.textContent = currentCount - 1;
+                            type = 'dislike-none';
+                        }
+                    }
+                    const username = localStorage.getItem("username");
+                    fetch(`/The_Noble_News/LikeDislikeServlet`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({username, commentId, type})
+                    })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status !== 'success') {
+                                    showNotification('Error updating thumbs.');
+                                }
+                            })
+                            .catch(err => {
+                                console.error('Error updating thumbs:', err);
+                                showNotification('Server error: Could not update thumbs.');
+                            });
+                }
+
+                function formatTimeAgo(date) {
+                    const now = new Date();
+                    const seconds = Math.floor((now - date) / 1000);
+                    const minutes = Math.floor(seconds / 60);
+                    const hours = Math.floor(seconds / 3600);
+                    const days = Math.floor(seconds / 86400);
+                    const weeks = Math.floor(seconds / 604800);
+                    const months = Math.floor(seconds / 2592000);
+                    const years = Math.floor(seconds / 31536000);
+                    if (seconds < 60) {
+                        return `${seconds}second ago`;
+                    } else if (minutes === 1) {
+                        return `1minute ago`;
+                    } else if (minutes < 60) {
+                        return `${minutes}minutes ago`;
+                    } else if (hours === 1) {
+                        return `1hour ago`;
+                    } else if (hours < 24) {
+                        return `${hours}hours ago`;
+                    } else if (days === 1) {
+                        return `1day ago`;
+                    } else if (days < 30) {
+                        return `${days}days ago`;
+                    } else if (weeks === 1) {
+                        return `1week ago`;
+                    } else if (weeks < 52) {
+                        return `${weeks}weeks ago`;
+                    } else if (months === 1) {
+                        return `1month ago`;
+                    } else if (months < 12) {
+                        return `${months}months ago`;
+                    } else if (years === 1) {
+                        return `1year ago`;
+                    } else {
+                        return `${years}years ago`;
+                    }
                 }
             });
 
-// Move the saveNews function outside DOMContentLoaded
             function saveNews(card) {
                 const email = localStorage.getItem("email");
                 const newsTitle = card.querySelector("#news-title").innerText;
                 const newsUrl = card.querySelector("#news-img").dataset.url;
-
                 fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`)
                         .then(response => response.json())
                         .then(savedNewsList => {
@@ -552,7 +800,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                 const newsImg = card.querySelector("#news-img").src;
                                 const newsSource = card.querySelector("#news-source").innerText;
                                 const newsDesc = card.querySelector("#news-desc").innerText;
-
                                 const newsData = {
                                     email: email,
                                     img: newsImg,
@@ -561,7 +808,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                                     source: newsSource,
                                     desc: newsDesc
                                 };
-
                                 fetch(`http://localhost:8080/The_Noble_News/NewsServlet?email=${email}`, {
                                     method: "POST",
                                     headers: {

@@ -123,7 +123,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <li><strong>Multiple News Sources :</strong> We use NewsAPI to bring you news from a wide range of reliable sources, providing you with a comprehensive view of the latest stories.</li>
                 <li><strong>Night Mode :</strong> For users who prefer to read at night, we provide an automatic night mode that offers a comfortable reading experience.</li>
                 <li><strong>Country-Specific News :</strong> You can easily select news from specific countries, allowing you to focus on global or regional updates based on your preferences.</li>
-                <li><strong>Multilingual News of India :</strong> News from India is available in three languages: English, Hindi, and Tamil, so you can stay informed in the language of your choice.</li>
+                <li><strong>Multilingual News of India :</strong> News from India is available in three languages: English, Hindi, and Marathi, so you can stay informed in the language of your choice.</li>
                 <li><strong>Save Your Favorite News : </strong>Found an article you want to revisit? You can save any news article for later reading with just a click.</li>
                 <li><strong>Browse News by Date : </strong>Our website allows you to browse news from any selected date up to the current date, making it easier to catch up on past events.</li>
                 <li><strong>Quick Overview : </strong> We display a brief description of each news article, giving you a summary at a glance. If you’re interested in reading more, simply click to access the full article.</li>
@@ -164,7 +164,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 if (element === true) {
                     Mode.classList.remove("fa-sun");
                     Mode.classList.add("fa-moon");
-                    document.querySelector(".container").style.backgroundColor = "#454545";
+                    document.querySelector("body").style.backgroundColor = "#454545";
                     document.querySelector("h1").style.color = "white";
                     document.querySelector("h2").style.color = "white";
                     let strong = document.querySelectorAll("strong");
@@ -174,7 +174,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 } else {
                     Mode.classList.remove("fa-moon");
                     Mode.classList.add("fa-sun");
-                    document.querySelector(".container").style.backgroundColor = "#f0f0f0";
+                    document.querySelector("body").style.backgroundColor = "#f0f0f0";
                     document.querySelector("h1").style.color = "black";
                     document.querySelector("h2").style.color = "black";
                     let strong = document.querySelectorAll("strong");

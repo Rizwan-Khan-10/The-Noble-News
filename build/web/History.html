@@ -360,7 +360,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <div id="social-sharing">
                     <i class="fa-brands fa-whatsapp" onclick="shareOnWhatsApp()"></i>
                     <i class="fa-brands fa-facebook" onclick="shareOnFacebook()"></i>
-                    <i class="fa-brands fa-twitter" onclick="shareOnTwitter()"></i>
+                    <i class="fa-brands fa-x-twitter" onclick="shareOnTwitter()"></i>
                     <i class="fa-solid fa-copy"></i>
                     <i class="fa-solid fa-comment" onclick="Comments(this)"></i>
                 </div>
@@ -518,15 +518,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(newsTitle)}&url=${encodeURIComponent(newsUrl)}`;
                 window.open(twitterUrl, '_blank');
             }
-
-            document.addEventListener("DOMContentLoaded", () => {
-                const mode = localStorage.getItem("Mode");
-                if (mode === "true") {
-                    change(true);
-                } else {
-                    change(false);
-                }
-            });
 
             document.addEventListener('DOMContentLoaded', function () {
                 async function fetchNewsHistory(email) {
@@ -771,7 +762,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         const newsCard = createNewsCard(newsItem);
                         dateSection.appendChild(newsCard);
                     });
-
+                    
                     return [dateDiv, dateSection];
                 }
 
@@ -802,6 +793,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         const [dateDiv, dateSection] = createDateSection(date, groupedNews[date]);
                         container.appendChild(dateDiv);
                         container.appendChild(dateSection);
+                        const mode = localStorage.getItem("Mode");
+                        if (mode === "true") {
+                            change(true);
+                        } else {
+                            change(false);
+                        }
                     });
                 }
                 displayNews();

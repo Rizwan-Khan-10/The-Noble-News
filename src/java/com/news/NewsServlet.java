@@ -29,7 +29,7 @@ public class NewsServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query = "INSERT INTO saved_news (email, title, img, source, description, url, saved_date) VALUES (?, ?, ?, ?, ?, ?, NOW())";
             PreparedStatement ps = con.prepareStatement(query);
@@ -65,7 +65,7 @@ public class NewsServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query = "SELECT * FROM saved_news WHERE email = ?";
             PreparedStatement ps = con.prepareStatement(query);
@@ -104,19 +104,18 @@ public class NewsServlet extends HttpServlet {
         Gson gson = new Gson();
         NewsData newsData = gson.fromJson(reader, NewsData.class);
 
-        String url = newsData.getUrl(); // Use URL instead of title for deletion
+        String url = newsData.getUrl(); 
         String email = newsData.getEmail();
-        String dateToDelete = newsData.getSavedDate(); // Keep date for date-based deletion
+        String dateToDelete = newsData.getSavedDate();
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
 
             String query;
             PreparedStatement ps;
 
             if (url != null) {
-                // Delete based on URL and email
                 query = "DELETE FROM saved_news WHERE email = ? AND url = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, email);
@@ -128,7 +127,6 @@ public class NewsServlet extends HttpServlet {
                 ps.setString(1, email);
                 ps.setString(2, dateToDelete);
             } else {
-                // Delete all saved news for the user
                 query = "DELETE FROM saved_news WHERE email = ?";
                 ps = con.prepareStatement(query);
                 ps.setString(1, email);
@@ -159,10 +157,8 @@ public class NewsServlet extends HttpServlet {
         private String title;
         private String source;
         private String desc;
-        private String url; // Use URL for deletion
+        private String url; 
         private String savedDate;
-
-        // Getters and setters
         public String getUrl() {
             return url;
         }

@@ -75,9 +75,7 @@ public class bulkDeleteHistory extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "rizw@nKing777");
-            
-            // Replace 'url' with the actual column name if different
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/user_login_db", "root", "123456");
             String sql = "DELETE FROM user_history WHERE email = ? AND news_url = ?"; // Updated column name
             stmt = conn.prepareStatement(sql);
 
